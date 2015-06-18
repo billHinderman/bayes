@@ -1,0 +1,119 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        
+        <link rel="stylesheet" href="reset.css">
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      
+        
+        <link rel="stylesheet" href="style.css">
+
+        <script src="jquery.min.js"></script>
+        <script src="jstat.min.js"></script>
+        <script src="materialize.min.js"></script>
+        <script src="script.js"></script>
+    </head>
+    <body class="">
+      <nav class="light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper container">
+          <a id="logo-container" href="#" class="brand-logo">Bayesian Calculator</a>
+        </div>
+      </nav>
+      <main class="container row section">
+        <div class="card col s12 l5">
+          <form id="bayes-form" class="card-content">
+            <div class="input-field">
+              <input type="number" id="alpha_a" name="alpha_a" value="1" class="validate">
+              <label for="alpha_a">α <small>A</small></label>
+            </div> 
+            
+            <div class="input-field">
+              <input type="number" id="alpha_b" name="alpha_b" value="1" class="validate">
+              <label for="alpha_a">α <small>B</small></label>
+            </div> 
+
+            <div class="input-field"> 
+              <input type="number" id="beta_a" name="beta_a" value="1" class="validate">
+              <label for="alpha_a">β <small>A</small></label>
+            </div> 
+            
+            <div class="input-field">
+              <input type="number" id="beta_b" name="beta_b" value="1" class="validate">
+              <label for="alpha_a">β <small>B</small></label>
+            </div> 
+
+            <div class="input-field">
+              <input type="number" id="visitors_a" name="visitors_a" class="validate">
+              <label for="alpha_a">Visitors <small>A</small></label>
+            </div> 
+            
+            <div class="input-field">
+              <input type="number" id="conversions_a" name="conversions_a" class="validate">
+              <label for="alpha_a">Conversions <small>A</small></label>
+            </div> 
+
+            <div class="input-field">
+              <input type="number" id="visitors_b" name="visitors_b" class="validate">
+              <label for="alpha_a">Visitors <small>B</small></label>
+            </div> 
+            
+            <div class="input-field">
+              <input type="number" id="conversions_b" name="conversions_b" class="validate">
+              <label for="alpha_a">Conversions <small>B</small></label>
+            </div> 
+
+            <div class="right-align">
+              <button class="btn waves-effect waves-light orange" type="submit" name="action">Submit</button>
+            </div>
+          </form>
+        </div>
+        <section id="bayes-results" class="card col s12 l6 offset-l1">
+          <div class="card-content">
+            <div id="probability-b-a" class="row">
+              <div class="col s6">Probability of B beating A:</div>
+              <b class="value col s6">0</b>
+            </div>
+
+            <div id="probability-a-b" class="row">
+              <div class="col s6">Probability of A beating B:</div>
+              <b class="value col s6">0</b>
+            </div>
+
+            <div id="hdi-a" class="row">
+              <h5 class="col s12">HDI<small>A</small></h5>
+              <span class="col s6">HDI min:</span>
+              <b class="value-min col s6">0</b>
+              <span class="col s6">HDI max:</span>
+              <b class="value-max col s6">0</b>
+            </div>
+
+            <div id="hdi-b" class="row">
+              <h5 class="col s12">HDI<small>B</small></h5>
+              <span class="col s6">HDI min:</span>
+              <b class="value-min col s6">0</b>
+              <span class="col s6">HDI max:</span>
+              <b class="value-max col s6">0</b>
+            </div>
+
+            <div id="hdi-b-a" class="row">
+              <h5 class="col s12">HDI<small>B-A</small></h5>
+              <span class="col s6">HDI min:</span>
+              <b class="value-min col s6">0</b>
+              <span class="col s6">HDI max:</span>
+              <b class="value-max col s6">0</b>
+            </div>
+          </div>
+        </section>
+        <section id="bayes-graphs col s12">
+        </section>
+      </main>
+      <footer class="row"></footer>
+    </body>
+</html>

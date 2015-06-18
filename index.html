@@ -21,7 +21,7 @@
         <script src="script.js"></script>
     </head>
     <body class="">
-      <nav class="light-blue lighten-1" role="navigation">
+      <nav class="blue" role="navigation">
         <div class="nav-wrapper container">
           <a id="logo-container" href="#" class="brand-logo">Bayesian Calculator</a>
         </div>
@@ -29,6 +29,7 @@
       <main class="container row section">
         <div class="card col s12 l5">
           <form id="bayes-form" class="card-content">
+            <h4><small><i class="mdi-action-input grey-text"></i></small> Inputs</h4>
             <div class="input-field">
               <input type="number" id="alpha_a" name="alpha_a" value="1" class="validate">
               <label for="alpha_a">α <small>A</small></label>
@@ -70,12 +71,13 @@
             </div> 
 
             <div class="right-align">
-              <button class="btn waves-effect waves-light orange" type="submit" name="action">Submit</button>
+              <button class="btn waves-effect waves-light pink" type="submit" name="action">Calculate</button>
             </div>
           </form>
         </div>
         <section id="bayes-results" class="card col s12 l6 offset-l1">
           <div class="card-content">
+            <h4><small><i class="mdi-action-receipt grey-text"></i></small> Results</h4>
             <div id="probability-b-a" class="row">
               <div class="col s6">Probability of B beating A:</div>
               <b class="value col s6">0</b>

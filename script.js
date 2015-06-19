@@ -214,6 +214,7 @@ var bayes = function(alpha_a,alpha_b,beta_a,beta_b,visitors_a,conversions_a,visi
 
   var updateMarkup = function(probability_b_a,probability_a_b,HDI_a,HDI_b,HDI_b_a) {
     $('#bayes-results').removeClass('hide');
+    $('#hide-button').removeClass('hide');
     $('#probability-b-a .value').text(probability_b_a+'%');
     $('#probability-a-b .value').text(probability_a_b+'%');
 
@@ -318,5 +319,11 @@ $(function() {
           data['visitors_b'],
           data['conversions_b']).init();
   });
-});
 
+  $('#hide-button').on('click', function(e) {
+    e.preventDefault();
+    $(this).addClass('hide');
+    $('#bayes-graphs, #bayes-results').addClass('hide');
+    $('#visitors_a, #conversions_a, #visitors_b, #conversions_b').val('').removeClass('valid');
+  })
+});

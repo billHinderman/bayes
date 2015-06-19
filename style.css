@@ -2,6 +2,9 @@
 #bayes-graphs.hide {
   opacity: 0;
 }
+#hide-button {
+  margin-left: 1em;
+}
 @media screen and (min-width: 992px) {
   #bayes-form,
   #bayes-results {

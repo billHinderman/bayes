@@ -96,7 +96,7 @@
             <div class="divider"></div>
 
             <div id="hdi-a" class="row section">
-              <h5 class="col s12">HDI <sub>A</sub></h5>
+              <h5 class="col s12"><small><i class="mdi-action-receipt pink-text"></i></small> HDI <sub>A</sub></h5>
               <span class="col s6">HDI min:</span>
               <b class="value-min col s6">0</b>
               <span class="col s6">HDI max:</span>
@@ -106,7 +106,7 @@
             <div class="divider"></div>
 
             <div id="hdi-b" class="row section">
-              <h5 class="col s12">HDI <sub>B</sub></h5>
+              <h5 class="col s12"><small><i class="mdi-action-receipt blue-text"></i></small> HDI <sub>B</sub></h5>
               <span class="col s6">HDI min:</span>
               <b class="value-min col s6">0</b>
               <span class="col s6">HDI max:</span>
@@ -116,7 +116,7 @@
             <div class="divider"></div>
 
             <div id="hdi-b-a" class="row section">
-              <h5 class="col s12">HDI <sub>B-A</sub></h5>
+              <h5 class="col s12"><small><i class="mdi-action-receipt yellow-text"></i></small> HDI <sub>B-A</sub></h5>
               <span class="col s6">HDI min:</span>
               <b class="value-min col s6">0</b>
               <span class="col s6">HDI max:</span>
@@ -126,20 +126,20 @@
         </section>
         <section id="bayes-graphs" class="card col s12 hide">
           <div class="card-content">
-            <h2 class="card-title black-text"><small><i class="mdi-editor-insert-chart grey-text"></i></small>Sample Charts</h2>
+            <h2 class="card-title black-text"><small><i class="mdi-editor-insert-chart grey-text"></i></small> Sample Charts</h2>
             <div class="section">
-              <div>
+              <a id="a-toggle" class="black-text" href="#">
                 <i class="mdi-editor-insert-chart pink-text"></i>
                 <span class="title">Samples <sub>A</sub></span>
-              </div>
-              <div>
+              </a>
+              <a id="b-toggle" class="black-text" href="#">
                 <i class="mdi-editor-insert-chart blue-text"></i>
                 <span class="title">Samples <sub>B</sub></span>
-              </div>
-              <div>
+              </a>
+              <a id="b_a-toggle" class="black-text" href="#">
                 <i class="mdi-editor-insert-chart yellow-text "></i>
                 <span class="title">Samples <sub>B-A</sub></span>
-              </div>
+              </a>
             </div>
             <div id="chart-content" class="section"><svg class="chart"></svg></div>
           </div>

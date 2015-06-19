@@ -6,15 +6,15 @@ var bayes = function(alpha_a,alpha_b,beta_a,beta_b,visitors_a,conversions_a,visi
 
     var alpha_a_hat = alpha_a + conversions_a;
     var alpha_b_hat = alpha_b + conversions_b;
-    var beta_a_hat = beta_a + visitors_a - conversions_a;
-    var beta_b_hat = beta_b + visitors_b - conversions_b; 
+    var beta_a_hat = beta_a + (visitors_a - conversions_a);
+    var beta_b_hat = beta_b + (visitors_b - conversions_b); 
 
     var samples_a = createSamples(alpha_a_hat,beta_a_hat,sample);
     var samples_b = createSamples(alpha_b_hat,beta_b_hat,sample)
     var samples_b_a = createSamplesDiff(samples_a,samples_b,sample);
 
     var probability_b_a = createProbability(samples_b_a);
-    var probability_a_b = (100-probability_b_a).toFixed(4);
+    var probability_a_b = (100-probability_b_a);
 
     var HDI_a = HDIofDiff(samples_a,credMass);
     var HDI_b = HDIofDiff(samples_b,credMass);
@@ -249,12 +249,17 @@ var bayes = function(alpha_a,alpha_b,beta_a,beta_b,visitors_a,conversions_a,visi
   var createProbability = function(samples) {
     var positive_samples = [];
     for(var i=0;i<samples.length;i++) {
-      positive_samples[positive_samples.length] = (samples[i] > 0) ? 1 : 0;
+      if(samples[i] > 0) {
+        positive_samples[positive_samples.length] = 1;
+      } else {
+        positive_samples[positive_samples.length] = 0;
+      }
     }
     var total = positive_samples.reduce(function(a, b) {
       return a + b;
     });
-    var probability = ((total/(positive_samples.length))*100).toFixed(4);
+    console.log(total,positive_samples.length);
+    var probability = ((total/(positive_samples.length))*100);
     return probability;
   }
 
@@ -275,8 +280,8 @@ var bayes = function(alpha_a,alpha_b,beta_a,beta_b,visitors_a,conversions_a,visi
     }
     
     var minimum = indexOfSmallest(ciWidth);
-    var HDImin = sortedSample[minimum].toFixed(4);
-    var HDImax = sortedSample[minimum+ciIdxInc].toFixed(4);
+    var HDImin = sortedSample[minimum];
+    var HDImax = sortedSample[minimum+ciIdxInc];
     return {'HDImin':HDImin,'HDImax':HDImax};
   }
 
@@ -325,5 +330,36 @@ $(function() {
     $(this).addClass('hide');
     $('#bayes-graphs, #bayes-results').addClass('hide');
     $('#visitors_a, #conversions_a, #visitors_b, #conversions_b').val('').removeClass('valid');
-  })
+  });
+
+  $(document).on('click','#a-toggle',function(e) {
+    e.preventDefault();
+    var $a = $('g.a');
+    if($a.eq(0).attr('class').indexOf('hide') > -1) {
+      $a.attr('class','a');  
+    } else {
+      $a.attr('class','a hide');  
+    }
+    $(this).find('i').toggleClass('grey-text pink-text');
+  });
+  $(document).on('click','#b-toggle',function(e) {
+    e.preventDefault();
+    var $b = $('g.b');
+    if($b.eq(0).attr('class').indexOf('hide') > -1) {
+      $b.attr('class','b');  
+    } else {
+      $b.attr('class','b hide');  
+    }
+    $(this).find('i').toggleClass('grey-text blue-text');
+  });
+  $(document).on('click','#b_a-toggle',function(e) {
+    e.preventDefault();
+    var $b_a = $('g.b-a');
+    if($b_a.eq(0).attr('class').indexOf('hide') > -1) {
+      $b_a.attr('class','b-a');  
+    } else {
+      $b_a.attr('class','b-a hide');  
+    }
+    $(this).find('i').toggleClass('grey-text yellow-text');
+  });
 });

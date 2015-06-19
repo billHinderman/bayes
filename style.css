@@ -11,6 +11,9 @@
     min-height: 788px;
   }
 }
+g.hide {
+  opacity: 0;
+}
 .chart {
   margin-left: 24px;
 }

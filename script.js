@@ -14,14 +14,202 @@ var bayes = function(alpha_a,alpha_b,beta_a,beta_b,visitors_a,conversions_a,visi
     var samples_b_a = createSamplesDiff(samples_a,samples_b,sample);
 
     var probability_b_a = createProbability(samples_b_a);
-    var probability_a_b = (100-probability_b_a).toFixed(2);
+    var probability_a_b = (100-probability_b_a).toFixed(4);
 
     var HDI_a = HDIofDiff(samples_a,credMass);
     var HDI_b = HDIofDiff(samples_b,credMass);
     var HDI_b_a = HDIofDiff(samples_b_a,credMass);
 
-    console.log(probability_b_a,probability_a_b,HDI_a,HDI_b,HDI_b_a);
     updateMarkup(probability_b_a,probability_a_b,HDI_a,HDI_b,HDI_b_a);
+    loadCharts(samples_a,samples_b,samples_b_a);
+  }
+  var loadCharts = function(a,b,b_a) {
+    $('#bayes-graphs').removeClass('hide');
+    var cl_a = cleanData(a,'a');
+    var cl_b = cleanData(b,'b');
+    var cl_b_a = cleanData(b_a,'b-a');
+    var bounds = calculateBounds(cl_a,cl_b,cl_b_a);
+    var diff = calculateMaxDiff(cl_a['data'],cl_b['data'],cl_b_a['data']);
+    var offsets = calculateOffsets(cl_a['data'],cl_b['data'],cl_b_a['data'],diff);
+
+    function draw() {
+      $('#chart-content .chart').empty();
+      var contentSize = $('#bayes-graphs card-content').width();
+      var intervalSize = 6;
+      var contentHeight = 320;
+      var marginSize = 24;
+      var x = d3.scale.linear()
+      .domain([bounds['minX'], bounds['maxX']])
+      .range([0, contentSize]);
+      var y = d3.scale.linear()
+        .domain([bounds['minY'], bounds['maxY']])
+        .range([0, contentHeight]);
+
+      var chart = d3.select('#chart-content .chart')
+        .attr('width',$('#bayes-graphs .card-content').width()-marginSize)
+        .attr('height',contentHeight+marginSize)
+
+      var bar_a = chart.selectAll('.a')
+        .data(cl_a['data'])
+        .enter().append('g')
+        .attr('class',cl_a['type'])
+        .attr('transform',function(d, i) { return 'translate('+(i*intervalSize)+',0)'; });
+      bar_a.append('rect')
+        .attr('class',cl_a['type'])
+        .attr('y',function(d) { return contentHeight - y(d.y); })
+        .attr('x',function() {return offsets['a'];})
+        .attr('height',function(d) { return y(d.y); })
+        .attr('width',function(d) { return 3; });
+
+      var bar_b = chart.selectAll('.b')
+        .data(cl_b['data'])
+        .enter().append('g')
+        .attr('class',cl_b['type'])
+        .attr('transform',function(d, i) { return 'translate('+(i*intervalSize)+',0)'; });
+      bar_b.append('rect')
+        .attr('class',cl_b['type'])
+        .attr('y',function(d) { return contentHeight - y(d.y); })
+        .attr('x',function() {return offsets['b'];})
+        .attr('height',function(d) { return y(d.y); })
+        .attr('width',function(d) { return 3; });
+
+      var bar_b_a = chart.selectAll('.b_a')
+        .data(cl_b_a['data'])
+        .enter().append('g')
+        .attr('class',cl_b_a['type'])
+        .attr('transform',function(d, i) { return 'translate('+(i*intervalSize)+',0)'; });
+      bar_b_a.append('rect')
+        .attr('class',cl_b_a['type'])
+        .attr('y',function(d) { return contentHeight - y(d.y); })
+        .attr('x',function() {return offsets['b_a'];})
+        .attr('height',function(d) { return y(d.y); })
+        .attr('width',function(d) { return intervalSize-1; });
+    }
+    draw();
+    $(window).on('resize',function() {
+      draw();
+    });
+  }
+
+  var cleanData = function(data,type) {
+    var clean = {'type':type,
+                  'data':[]};
+
+    for(var i=0;i<data.length;i++) {
+      data[i] = data[i].toFixed(5);
+    }
+    data = data.sort(function(a,b) {
+      return a-b;
+    });
+
+    var prev;
+    var cleanedData = [];
+    for(var i=0;i<data.length;i++) {
+      if(data[i] !== prev) {
+        clean['data'][clean['data'].length] = {'x':data[i],'y':1};
+      } else {
+        clean['data'][clean['data'].length-1]['y']+=1;
+      }
+      prev = data[i];
+    }
+    
+    return clean;
+  }
+
+  var calculateBounds = function(a,b,c) {
+    var minX = Math.min(a['data'][0]['x'],b['data'][0]['x'],c['data'][0]['x']);
+    var minY = 0;
+    var maxX = Math.max(a['data'][a['data'].length-1]['x'],b['data'][b['data'].length-1]['x'],c['data'][c['data'].length-1]['x']);
+    var maxY_a = getMaxFromSet(a);
+    var maxY_b = getMaxFromSet(b);
+    var maxY_c = getMaxFromSet(c);
+    var maxY = Math.max(maxY_a,maxY_b,maxY_c);
+    return {'minX':minX,'minY':minY,'maxX':maxX,'maxY':maxY};
+  }
+
+  var calculateMaxDiff = function(a,b,c) {
+    var min;
+    var max;
+    var minX = Math.min(a[0]['x'],b[0]['x'],c[0]['x']);
+    if(minX === a[0]['x']) {
+      min = 'a';
+    } else if(minX === b[0]['x']) {
+      min = 'b';
+    } else {
+      min = 'b_a';
+    }
+    var maxX = Math.max(a[a.length-1]['x'],b[b.length-1]['x'],c[c.length-1]['x']);
+    if(maxX === a[a.length-1]['x']) {
+      max = 'a';
+    } else if(maxX === b[b.length-1]['x']) {
+      max = 'b';
+    } else {
+      max = 'b_a';
+    }
+    return {'min':min,'max':max};
+  }
+
+  var calculateOffsets = function(a,b,c,diff) {
+    var offsetA = 0;
+    var offsetB = 0;
+    var offsetC = 0;
+    if(diff['min'] === 'a') {
+      for(var i=0;i<a.length;i++) {
+        if(a[i]['x'] < b[0]['x']) {
+          offsetB++;
+        }
+        if(a[i]['x'] < c[0]['x']) {
+          offsetC++;
+        }
+      }
+    } else if(diff['min'] === 'b') {
+      for(var i=0;i<b.length;i++) {
+        if(b[i]['x'] < a[0]['x']) {
+          offsetA++;
+        }
+        if(b[i]['x'] < c[0]['x']) {
+          offsetC++;
+        }
+      }
+    } else {
+      for(var i=0;i<c.length;i++) {
+        if(c[i]['x'] < a[0]['x']) {
+          offsetA++;
+        }
+        if(c[i]['x'] < b[0]['x']) {
+          offsetB++;
+        }
+      }
+    }
+    return {'a':offsetA,'b':offsetB,'b_a':offsetC};
+  }
+
+  var getMaxFromSet = function(data) {
+    var max = 0;
+    for(var i=0;i<data['data'].length;i++) {
+      if(data['data'][i]['y'] > max) {
+        max = data['data'][i]['y'];
+      }
+    }
+    return max;
+  }
+
+  var createChartSpinner = function() {
+    var $markup = $('<div id="chart-content" class="center-align">\
+                      <div class="preloader-wrapper big active">\
+                        <div class="spinner-layer spinner-blue-only">\
+                          <div class="circle-clipper left">\
+                            <div class="circle"></div>\
+                          </div><div class="gap-patch">\
+                            <div class="circle"></div>\
+                          </div><div class="circle-clipper right">\
+                            <div class="circle"></div>\
+                          </div>\
+                        </div>\
+                      </div>\
+                      <svg class="chart"></svg>\
+                    </div>');
+    return $markup;
   }
 
   var updateMarkup = function(probability_b_a,probability_a_b,HDI_a,HDI_b,HDI_b_a) {
@@ -65,7 +253,7 @@ var bayes = function(alpha_a,alpha_b,beta_a,beta_b,visitors_a,conversions_a,visi
     var total = positive_samples.reduce(function(a, b) {
       return a + b;
     });
-    var probability = ((total/(positive_samples.length))*100).toFixed(2);
+    var probability = ((total/(positive_samples.length))*100).toFixed(4);
     return probability;
   }
 

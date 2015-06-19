@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <title>Bayesian Calculator</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -17,57 +17,59 @@
 
         <script src="jquery.min.js"></script>
         <script src="jstat.min.js"></script>
+        <script src="d3.min.js"></script>
         <script src="materialize.min.js"></script>
         <script src="script.js"></script>
     </head>
-    <body class="">
+    <body class="grey lighten-5">
       <nav class="blue" role="navigation">
         <div class="nav-wrapper container">
-          <a id="logo-container" href="#" class="brand-logo">Bayesian Calculator</a>
+          <a id="logo-container" href="/" class="brand-logo">Bayesian Calculator</a>
         </div>
       </nav>
       <main class="container row section">
         <div class="card col s12 l5">
           <form id="bayes-form" class="card-content">
-            <h4><small><i class="mdi-action-input grey-text"></i></small> Inputs</h4>
+            <h2 class="card-title black-text"><small><i class="mdi-action-input grey-text"></i></small> Inputs</h2>
+            <div class="divider"></div>
             <div class="input-field">
-              <input type="number" id="alpha_a" name="alpha_a" value="1" class="validate">
-              <label for="alpha_a">α <small>A</small></label>
+              <input type="number" id="alpha_a" name="alpha_a" value="1" class="validate valid">
+              <label for="alpha_a">α <sub>A</sub></label>
             </div> 
             
             <div class="input-field">
-              <input type="number" id="alpha_b" name="alpha_b" value="1" class="validate">
-              <label for="alpha_a">α <small>B</small></label>
+              <input type="number" id="alpha_b" name="alpha_b" value="1" class="validate valid">
+              <label for="alpha_a">α <sub>B</sub></label>
             </div> 
 
             <div class="input-field"> 
-              <input type="number" id="beta_a" name="beta_a" value="1" class="validate">
-              <label for="alpha_a">β <small>A</small></label>
+              <input type="number" id="beta_a" name="beta_a" value="1" class="validate valid">
+              <label for="alpha_a">β <sub>A</sub></label>
             </div> 
             
             <div class="input-field">
-              <input type="number" id="beta_b" name="beta_b" value="1" class="validate">
-              <label for="alpha_a">β <small>B</small></label>
+              <input type="number" id="beta_b" name="beta_b" value="1" class="validate valid">
+              <label for="alpha_a">β <sub>B</sub></label>
             </div> 
 
             <div class="input-field">
-              <input type="number" id="visitors_a" name="visitors_a" class="validate">
-              <label for="alpha_a">Visitors <small>A</small></label>
+              <input type="number" id="visitors_a" name="visitors_a" value="828025" class="validate">
+              <label for="alpha_a">Visitors <sub>A</sub></label>
             </div> 
             
             <div class="input-field">
-              <input type="number" id="conversions_a" name="conversions_a" class="validate">
-              <label for="alpha_a">Conversions <small>A</small></label>
+              <input type="number" id="conversions_a" name="conversions_a" value="11599" class="validate">
+              <label for="alpha_a">Conversions <sub>A</sub></label>
             </div> 
 
             <div class="input-field">
-              <input type="number" id="visitors_b" name="visitors_b" class="validate">
-              <label for="alpha_a">Visitors <small>B</small></label>
+              <input type="number" id="visitors_b" name="visitors_b" value="780456" class="validate">
+              <label for="alpha_a">Visitors <sub>B</sub></label>
             </div> 
             
             <div class="input-field">
-              <input type="number" id="conversions_b" name="conversions_b" class="validate">
-              <label for="alpha_a">Conversions <small>B</small></label>
+              <input type="number" id="conversions_b" name="conversions_b" value="11371" class="validate">
+              <label for="alpha_a">Conversions <sub>B</sub></label>
             </div> 
 
             <div class="right-align">
@@ -75,37 +77,45 @@
             </div>
           </form>
         </div>
-        <section id="bayes-results" class="card col s12 l6 offset-l1">
+        <section id="bayes-results" class="card col s12 l6 offset-l1 hide">
           <div class="card-content">
-            <h4><small><i class="mdi-action-receipt grey-text"></i></small> Results</h4>
-            <div id="probability-b-a" class="row">
-              <div class="col s6">Probability of B beating A:</div>
+            <h2 class="card-title black-text"><small><i class="mdi-action-receipt grey-text"></i></small> Results</h2>
+            <div class="divider"></div>
+            <div id="probability-b-a" class="row section">
+              <div class="col s6">Probability of <b>B</b> beating <b>A</b>:</div>
               <b class="value col s6">0</b>
             </div>
 
-            <div id="probability-a-b" class="row">
-              <div class="col s6">Probability of A beating B:</div>
+
+            <div id="probability-a-b" class="row section">
+              <div class="col s6">Probability of <b>A</b> beating <b>B</b>:</div>
               <b class="value col s6">0</b>
             </div>
 
-            <div id="hdi-a" class="row">
-              <h5 class="col s12">HDI<small>A</small></h5>
+            <div class="divider"></div>
+
+            <div id="hdi-a" class="row section">
+              <h5 class="col s12">HDI <sub>A</sub></h5>
               <span class="col s6">HDI min:</span>
               <b class="value-min col s6">0</b>
               <span class="col s6">HDI max:</span>
               <b class="value-max col s6">0</b>
             </div>
 
-            <div id="hdi-b" class="row">
-              <h5 class="col s12">HDI<small>B</small></h5>
+            <div class="divider"></div>
+
+            <div id="hdi-b" class="row section">
+              <h5 class="col s12">HDI <sub>B</sub></h5>
               <span class="col s6">HDI min:</span>
               <b class="value-min col s6">0</b>
               <span class="col s6">HDI max:</span>
               <b class="value-max col s6">0</b>
             </div>
 
-            <div id="hdi-b-a" class="row">
-              <h5 class="col s12">HDI<small>B-A</small></h5>
+            <div class="divider"></div>
+
+            <div id="hdi-b-a" class="row section">
+              <h5 class="col s12">HDI <sub>B-A</sub></h5>
               <span class="col s6">HDI min:</span>
               <b class="value-min col s6">0</b>
               <span class="col s6">HDI max:</span>
@@ -113,9 +123,42 @@
             </div>
           </div>
         </section>
-        <section id="bayes-graphs col s12">
+        <section id="bayes-graphs" class="card col s12 hide">
+          <div class="card-content">
+            <h2 class="card-title black-text"><small><i class="mdi-editor-insert-chart grey-text"></i></small>Sample Charts</h2>
+            <div class="section">
+              <div>
+                <i class="mdi-editor-insert-chart pink-text"></i>
+                <span class="title">Samples <sub>A</sub></span>
+              </div>
+              <div>
+                <i class="mdi-editor-insert-chart blue-text"></i>
+                <span class="title">Samples <sub>B</sub></span>
+              </div>
+              <div>
+                <i class="mdi-editor-insert-chart yellow-text "></i>
+                <span class="title">Samples <sub>B-A</sub></span>
+              </div>
+            </div>
+            <div id="chart-content" class="section"><svg class="chart"></svg></div>
+          </div>
         </section>
       </main>
-      <footer class="row"></footer>
+      <footer class="page-footer blue">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Footer Content</h5>
+                <p class="grey-text text-lighten-4">With <i class="mdi-action-favorite"></i> from space.</p>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2015 <a href="http://www.billhinderman.com" target="_blank" class="grey-text text-lighten-4">Bill Hinderman</a>, Shanu Pant
+            <a class="grey-text text-lighten-4 right" href="http://opensource.org/licenses/MIT">MIT License</a>
+            </div>
+          </div>
+        </footer>
     </body>
 </html>

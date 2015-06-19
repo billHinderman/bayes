@@ -1,0 +1,24 @@
+#bayes-results.hide,
+#bayes-graphs.hide {
+  opacity: 0;
+}
+@media screen and (min-width: 992px) {
+  #bayes-form,
+  #bayes-results {
+    min-height: 788px;
+  }
+}
+.chart {
+  margin-left: 24px;
+}
+rect.a {
+  fill: #e91e63;
+}
+
+rect.b {
+  fill: #1e88e5;
+}
+
+rect.b-a {
+  fill: #ffea00;
+}
